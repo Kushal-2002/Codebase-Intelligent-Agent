@@ -2,6 +2,9 @@ import os
 from ollama import chat
 from sentence_transformers import SentenceTransformer
 from sklearn.metrics.pairwise import cosine_similarity
+import pickle
+
+
 import chromadb
 
 embedding_model = SentenceTransformer("all-MiniLM-L6-v2")
@@ -9,13 +12,18 @@ client = chromadb.PersistentClient(path="./chroma_db")
 
 collection = client.get_or_create_collection(name="code_chunks")
 
+with open("call_graph.pkl", "rb") as f:
+    call_graph = pickle.load(f)
+
+with open("function_lookup.pkl", "rb") as f:
+    function_lookup = pickle.load(f)
 
 question = input("Ask a question: ")
 
 
 question_embedding = embedding_model.encode(question)
 
-results = collection.query(query_embeddings=[question_embedding.tolist()], n_results=3)
+results = collection.query(query_embeddings=[question_embedding.tolist()], n_results=1)
 
 relevant_text = ""
 
@@ -24,8 +32,43 @@ for i in range(len(results["documents"][0])):
 
     path = results["metadatas"][0][i]["path"]
 
-    chunk_id = results["metadatas"][0][i]["chunk_id"]
-    print(f"Retrieved: {path} | Chunk: {chunk_id}")
+    function_name = results["metadatas"][0][i]["function_name"]
+    short_name = function_name.split("(")[0]
+
+    neighbors = []
+    print("\nGRAPH NEIGHBORS:\n")
+
+    for node in call_graph:
+        if node.endswith(f"::{short_name}"):
+            print("MATCHED NODE:", node)
+
+            for neighbor in call_graph[node]:
+                print("   ->", neighbor)
+                neighbors.append(neighbor)
+
+    print("\nDEPENDENCIES FOUND:")
+
+    neighbors = list(set(neighbors))
+    neighbors = list(set(neighbors))
+
+    for neighbor in neighbors:
+        print(neighbor)
+
+        if neighbor in function_lookup:
+            print("\nADDING DEPENDENCY SOURCE:")
+            print(neighbor)
+            relevant_text += "\nDEPENDENCY:\n"
+
+            relevant_text += function_lookup[neighbor]
+
+            relevant_text += "\n"
+
+    function_name = results["metadatas"][0][i]["function_name"]
+
+    # print("\nSOURCE CODE:")
+    # print(chunk_text)
+
+    print("-" * 80)
 
     relevant_text += f"\nFILE: {path}\n"
 
