@@ -159,8 +159,13 @@ for func, calls in call_graph.items():
 with open("call_graph.pkl", "wb") as f:
     pickle.dump(call_graph, f)
 
+with open("graph.pkl", "wb") as f:
+    pickle.dump(G, f)
+
 for func in call_graph:
     if "main" in func:
         print(func)
 
 print(list(G.predecessors("repository/client.cpp::connect_to_addr")))
+
+print(list(G.successors("repository/client.cpp::connect_any_tracker")))

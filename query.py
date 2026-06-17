@@ -1,9 +1,7 @@
-import os
 from ollama import chat
 from sentence_transformers import SentenceTransformer
-from sklearn.metrics.pairwise import cosine_similarity
 import pickle
-
+import networkx as nx
 
 import chromadb
 
@@ -18,63 +16,102 @@ with open("call_graph.pkl", "rb") as f:
 with open("function_lookup.pkl", "rb") as f:
     function_lookup = pickle.load(f)
 
+with open("graph.pkl", "rb") as f:
+    G = pickle.load(f)
+
+
+def search_code(question):
+
+    question_embedding = embedding_model.encode(question)
+
+    results = collection.query(
+        query_embeddings=[question_embedding.tolist()], n_results=3
+    )
+
+    return results
+
+
+def find_graph_nodes(function_name):
+
+    short_name = function_name.split("(")[0]
+
+    matches = []
+
+    for node in call_graph:
+        if node.endswith(f"::{short_name}"):
+            matches.append(node)
+
+    return matches
+
+
+def get_dependencies(node):
+
+    if node is None:
+        return []
+
+    return list(G.successors(node))
+
+
+def get_callers(node):
+
+    if node is None:
+        return []
+
+    return list(G.predecessors(node))
+
+
+def get_source(node):
+
+    return function_lookup.get(node, "")
+
+
 question = input("Ask a question: ")
 
-
-question_embedding = embedding_model.encode(question)
-
-results = collection.query(query_embeddings=[question_embedding.tolist()], n_results=1)
+results = search_code(question)
 
 relevant_text = ""
 
 for i in range(len(results["documents"][0])):
     chunk_text = results["documents"][0][i]
 
-    path = results["metadatas"][0][i]["path"]
-
-    function_name = results["metadatas"][0][i]["function_name"]
-    short_name = function_name.split("(")[0]
-
-    neighbors = []
-    print("\nGRAPH NEIGHBORS:\n")
-
-    for node in call_graph:
-        if node.endswith(f"::{short_name}"):
-            print("MATCHED NODE:", node)
-
-            for neighbor in call_graph[node]:
-                print("   ->", neighbor)
-                neighbors.append(neighbor)
-
-    print("\nDEPENDENCIES FOUND:")
-
-    neighbors = list(set(neighbors))
-    neighbors = list(set(neighbors))
-
-    for neighbor in neighbors:
-        print(neighbor)
-
-        if neighbor in function_lookup:
-            print("\nADDING DEPENDENCY SOURCE:")
-            print(neighbor)
-            relevant_text += "\nDEPENDENCY:\n"
-
-            relevant_text += function_lookup[neighbor]
-
-            relevant_text += "\n"
-
     function_name = results["metadatas"][0][i]["function_name"]
 
-    # print("\nSOURCE CODE:")
-    # print(chunk_text)
+    matched_nodes = find_graph_nodes(function_name)
 
-    print("-" * 80)
+    print("\nMATCHED NODES:")
+    print(matched_nodes)
 
-    relevant_text += f"\nFILE: {path}\n"
+    print("\nMATCHED FUNCTION:")
+    print(function_name)
 
-    relevant_text += chunk_text
-    relevant_text += "\n"
+    question_lower = question.lower()
+    processed_nodes = set()
 
+    for matched_node in matched_nodes:
+        if matched_node in processed_nodes:
+            continue
+
+        processed_nodes.add(matched_node)
+
+        print("\nGRAPH NODE:")
+        print(matched_node)
+
+        if "who calls" in question_lower or "where is" in question_lower:
+            related_nodes = get_callers(matched_node)
+            print("\nCALLERS:")
+        else:
+            related_nodes = get_dependencies(matched_node)
+            print("\nDEPENDENCIES:")
+
+        for related_node in related_nodes:
+            print("   ->", related_node)
+
+            source = get_source(related_node)
+
+            if source:
+                relevant_text += "\nRELATED FUNCTION:\n"
+                relevant_text += source
+                relevant_text += "\n"
 print("\nCONTEXT LENGTH =", len(relevant_text))
 
 
