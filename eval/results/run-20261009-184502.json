@@ -1,0 +1,1052 @@
+[
+  {
+    "id": "q01",
+    "category": "lookup",
+    "system": "vector",
+    "question": "What does connect_any_tracker do?",
+    "retrieval_recall": 1.0,
+    "fact_recall": null,
+    "nodes": [
+      "repository/client.cpp::connect_any_tracker",
+      "repository/client.cpp::main",
+      "repository/server.cpp::peer_connector_thread"
+    ],
+    "answer": null,
+    "context_chars": 8240,
+    "latency_s": 0.16
+  },
+  {
+    "id": "q01",
+    "category": "lookup",
+    "system": "graph",
+    "question": "What does connect_any_tracker do?",
+    "retrieval_recall": 1.0,
+    "fact_recall": null,
+    "nodes": [
+      "repository/client.cpp::connect_any_tracker",
+      "repository/client.cpp::main",
+      "repository/server.cpp::peer_connector_thread",
+      "repository/client.cpp::connect_to_addr",
+      "repository/client.cpp::trim_copy",
+      "repository/client.cpp::load_trackers",
+      "repository/client.cpp::recv_line",
+      "repository/client.cpp::send_line",
+      "repository/server.cpp::flush_journal_to_fd",
+      "repository/server.cpp::send_line"
+    ],
+    "answer": null,
+    "context_chars": 11162,
+    "latency_s": 0.01
+  },
+  {
+    "id": "q02",
+    "category": "lookup",
+    "system": "vector",
+    "question": "How does connect_to_addr parse the address it is given?",
+    "retrieval_recall": 1.0,
+    "fact_recall": null,
+    "nodes": [
+      "repository/client.cpp::connect_to_addr",
+      "repository/server.cpp::peer_connector_thread",
+      "repository/server.cpp::main"
+    ],
+    "answer": null,
+    "context_chars": 7551,
+    "latency_s": 0.03
+  },
+  {
+    "id": "q02",
+    "category": "lookup",
+    "system": "graph",
+    "question": "How does connect_to_addr parse the address it is given?",
+    "retrieval_recall": 1.0,
+    "fact_recall": null,
+    "nodes": [
+      "repository/client.cpp::connect_to_addr",
+      "repository/server.cpp::peer_connector_thread",
+      "repository/server.cpp::main",
+      "repository/client.cpp::connect_any_tracker",
+      "repository/server.cpp::flush_journal_to_fd",
+      "repository/server.cpp::send_line",
+      "repository/server.cpp::dispatch_command",
+      "repository/server.cpp::recv_line",
+      "repository/server.cpp::load_journal_into_set",
+      "repository/server.cpp::split_tokens",
+      "repository/server.cpp::cleanup_fd"
+    ],
+    "answer": null,
+    "context_chars": 11274,
+    "latency_s": 0.01
+  },
+  {
+    "id": "q03",
+    "category": "lookup",
+    "system": "vector",
+    "question": "What format does load_trackers expect in the tracker file?",
+    "retrieval_recall": 1.0,
+    "fact_recall": null,
+    "nodes": [
+      "repository/client.cpp::main",
+      "repository/client.cpp::connect_any_tracker",
+      "repository/client.cpp::load_trackers"
+    ],
+    "answer": null,
+    "context_chars": 6335,
+    "latency_s": 0.03
+  },
+  {
+    "id": "q03",
+    "category": "lookup",
+    "system": "graph",
+    "question": "What format does load_trackers expect in the tracker file?",
+    "retrieval_recall": 1.0,
+    "fact_recall": null,
+    "nodes": [
+      "repository/client.cpp::main",
+      "repository/client.cpp::connect_any_tracker",
+      "repository/client.cpp::load_trackers",
+      "repository/client.cpp::trim_copy",
+      "repository/client.cpp::recv_line",
+      "repository/client.cpp::send_line",
+      "repository/client.cpp::connect_to_addr"
+    ],
+    "answer": null,
+    "context_chars": 8246,
+    "latency_s": 0.01
+  },
+  {
+    "id": "q04",
+    "category": "conceptual",
+    "system": "vector",
+    "question": "How does the client recover when the tracker it is connected to goes down?",
+    "retrieval_recall": 1.0,
+    "fact_recall": null,
+    "nodes": [
+      "repository/client.cpp::connect_any_tracker",
+      "repository/client.cpp::main",
+      "repository/server.cpp::main"
+    ],
+    "answer": null,
+    "context_chars": 9965,
+    "latency_s": 0.02
+  },
+  {
+    "id": "q04",
+    "category": "conceptual",
+    "system": "graph",
+    "question": "How does the client recover when the tracker it is connected to goes down?",
+    "retrieval_recall": 1.0,
+    "fact_recall": null,
+    "nodes": [
+      "repository/client.cpp::connect_any_tracker",
+      "repository/client.cpp::main",
+      "repository/server.cpp::main",
+      "repository/client.cpp::connect_to_addr",
+      "repository/client.cpp::trim_copy",
+      "repository/client.cpp::load_trackers",
+      "repository/client.cpp::recv_line",
+      "repository/client.cpp::send_line",
+      "repository/server.cpp::dispatch_command",
+      "repository/server.cpp::flush_journal_to_fd",
+      "repository/server.cpp::recv_line",
+      "repository/server.cpp::load_journal_into_set",
+      "repository/server.cpp::split_tokens",
+      "repository/server.cpp::cleanup_fd"
+    ],
+    "answer": null,
+    "context_chars": 15419,
+    "latency_s": 0.01
+  },
+  {
+    "id": "q05",
+    "category": "conceptual",
+    "system": "vector",
+    "question": "How does the code make sure a whole message is sent over a socket?",
+    "retrieval_recall": 1.0,
+    "fact_recall": null,
+    "nodes": [
+      "repository/client.cpp::send_all",
+      "repository/server.cpp::send_all",
+      "repository/client.cpp::connect_to_addr"
+    ],
+    "answer": null,
+    "context_chars": 1822,
+    "latency_s": 0.01
+  },
+  {
+    "id": "q05",
+    "category": "conceptual",
+    "system": "graph",
+    "question": "How does the code make sure a whole message is sent over a socket?",
+    "retrieval_recall": 1.0,
+    "fact_recall": null,
+    "nodes": [
+      "repository/client.cpp::send_all",
+      "repository/server.cpp::send_all",
+      "repository/client.cpp::connect_to_addr",
+      "repository/client.cpp::send_line",
+      "repository/server.cpp::send_line",
+      "repository/client.cpp::connect_any_tracker"
+    ],
+    "answer": null,
+    "context_chars": 2749,
+    "latency_s": 0.01
+  },
+  {
+    "id": "q06",
+    "category": "callers",
+    "system": "vector",
+    "question": "Which functions call connect_to_addr?",
+    "retrieval_recall": 1.0,
+    "fact_recall": null,
+    "nodes": [
+      "repository/client.cpp::connect_to_addr",
+      "repository/server.cpp::peer_connector_thread",
+      "repository/client.cpp::connect_any_tracker"
+    ],
+    "answer": null,
+    "context_chars": 3893,
+    "latency_s": 0.02
+  },
+  {
+    "id": "q06",
+    "category": "callers",
+    "system": "graph",
+    "question": "Which functions call connect_to_addr?",
+    "retrieval_recall": 1.0,
+    "fact_recall": null,
+    "nodes": [
+      "repository/client.cpp::connect_to_addr",
+      "repository/server.cpp::peer_connector_thread",
+      "repository/client.cpp::connect_any_tracker",
+      "repository/server.cpp::flush_journal_to_fd",
+      "repository/server.cpp::send_line",
+      "repository/client.cpp::main"
+    ],
+    "answer": null,
+    "context_chars": 9650,
+    "latency_s": 0.01
+  },
+  {
+    "id": "q07",
+    "category": "dependencies",
+    "system": "vector",
+    "question": "Which functions does the client's main function call?",
+    "retrieval_recall": 0.0,
+    "fact_recall": null,
+    "nodes": [
+      "repository/server.cpp::handle_client",
+      "repository/server.cpp::handle_show_downloads",
+      "repository/server.cpp::send_all"
+    ],
+    "answer": null,
+    "context_chars": 1052,
+    "latency_s": 0.03
+  },
+  {
+    "id": "q07",
+    "category": "dependencies",
+    "system": "graph",
+    "question": "Which functions does the client's main function call?",
+    "retrieval_recall": 0.0,
+    "fact_recall": null,
+    "nodes": [
+      "repository/server.cpp::handle_client",
+      "repository/server.cpp::handle_show_downloads",
+      "repository/server.cpp::send_all",
+      "repository/server.cpp::cleanup_fd",
+      "repository/server.cpp::dispatch_command",
+      "repository/server.cpp::split_tokens",
+      "repository/server.cpp::recv_line",
+      "repository/server.cpp::send_line"
+    ],
+    "answer": null,
+    "context_chars": 3540,
+    "latency_s": 0.01
+  },
+  {
+    "id": "q08",
+    "category": "conceptual",
+    "system": "vector",
+    "question": "How are lines read from a socket, and how are carriage returns handled?",
+    "retrieval_recall": 1.0,
+    "fact_recall": null,
+    "nodes": [
+      "repository/client.cpp::send_line",
+      "repository/server.cpp::send_line",
+      "repository/server.cpp::recv_line"
+    ],
+    "answer": null,
+    "context_chars": 909,
+    "latency_s": 0.01
+  },
+  {
+    "id": "q08",
+    "category": "conceptual",
+    "system": "graph",
+    "question": "How are lines read from a socket, and how are carriage returns handled?",
+    "retrieval_recall": 1.0,
+    "fact_recall": null,
+    "nodes": [
+      "repository/client.cpp::send_line",
+      "repository/server.cpp::send_line",
+      "repository/server.cpp::recv_line",
+      "repository/client.cpp::main",
+      "repository/client.cpp::send_all",
+      "repository/server.cpp::handle_create_user",
+      "repository/server.cpp::apply_create_user",
+      "repository/server.cpp::handle_login",
+      "repository/server.cpp::handle_create_group",
+      "repository/server.cpp::apply_create_group",
+      "repository/server.cpp::handle_join_group",
+      "repository/server.cpp::handle_list_groups",
+      "repository/server.cpp::handle_list_requests",
+      "repository/server.cpp::handle_accept_request",
+      "repository/server.cpp::apply_accept_request",
+      "repository/server.cpp::handle_logout",
+      "repository/server.cpp::handle_upload_file",
+      "repository/server.cpp::handle_list_files",
+      "repository/server.cpp::handle_download_file",
+      "repository/server.cpp::handle_show_downloads",
+      "repository/server.cpp::handle_stop_share",
+      "repository/server.cpp::dispatch_command",
+      "repository/server.cpp::flush_journal_to_fd",
+      "repository/server.cpp::peer_connector_thread",
+      "repository/server.cpp::send_all",
+      "repository/server.cpp::sync_reader_thread",
+      "repository/server.cpp::handle_client",
+      "repository/server.cpp::main"
+    ],
+    "answer": null,
+    "context_chars": 27850,
+    "latency_s": 0.01
+  },
+  {
+    "id": "q09",
+    "category": "lookup",
+    "system": "vector",
+    "question": "What does append_journal_line_if_new do?",
+    "retrieval_recall": 1.0,
+    "fact_recall": null,
+    "nodes": [
+      "repository/server.cpp::append_journal_line_if_new",
+      "repository/server.cpp::load_journal_into_set",
+      "repository/server.cpp::handle_sync_line"
+    ],
+    "answer": null,
+    "context_chars": 3416,
+    "latency_s": 0.02
+  },
+  {
+    "id": "q09",
+    "category": "lookup",
+    "system": "graph",
+    "question": "What does append_journal_line_if_new do?",
+    "retrieval_recall": 1.0,
+    "fact_recall": null,
+    "nodes": [
+      "repository/server.cpp::append_journal_line_if_new",
+      "repository/server.cpp::load_journal_into_set",
+      "repository/server.cpp::handle_sync_line",
+      "repository/server.cpp::apply_create_user",
+      "repository/server.cpp::apply_create_group",
+      "repository/server.cpp::apply_accept_request",
+      "repository/server.cpp::handle_upload_file",
+      "repository/server.cpp::handle_stop_share",
+      "repository/server.cpp::main",
+      "repository/server.cpp::sync_reader_thread",
+      "repository/server.cpp::split_tokens"
+    ],
+    "answer": null,
+    "context_chars": 13375,
+    "latency_s": 0.01
+  },
+  {
+    "id": "q10",
+    "category": "conceptual",
+    "system": "vector",
+    "question": "How does the server avoid writing the same journal entry twice, including after a restart?",
+    "retrieval_recall": 1.0,
+    "fact_recall": null,
+    "nodes": [
+      "repository/server.cpp::load_journal_into_set",
+      "repository/server.cpp::append_journal_line_if_new",
+      "repository/server.cpp::main"
+    ],
+    "answer": null,
+    "context_chars": 5129,
+    "latency_s": 0.02
+  },
+  {
+    "id": "q10",
+    "category": "conceptual",
+    "system": "graph",
+    "question": "How does the server avoid writing the same journal entry twice, including after a restart?",
+    "retrieval_recall": 1.0,
+    "fact_recall": null,
+    "nodes": [
+      "repository/server.cpp::load_journal_into_set",
+      "repository/server.cpp::append_journal_line_if_new",
+      "repository/server.cpp::main",
+      "repository/server.cpp::apply_create_user",
+      "repository/server.cpp::apply_create_group",
+      "repository/server.cpp::apply_accept_request",
+      "repository/server.cpp::handle_upload_file",
+      "repository/server.cpp::handle_stop_share",
+      "repository/server.cpp::handle_sync_line",
+      "repository/server.cpp::dispatch_command",
+      "repository/server.cpp::flush_journal_to_fd",
+      "repository/server.cpp::recv_line",
+      "repository/server.cpp::split_tokens",
+      "repository/server.cpp::cleanup_fd"
+    ],
+    "answer": null,
+    "context_chars": 15116,
+    "latency_s": 0.01
+  },
+  {
+    "id": "q11",
+    "category": "multi-hop",
+    "system": "vector",
+    "question": "How does the server process a create_group command from a client?",
+    "retrieval_recall": 1.0,
+    "fact_recall": null,
+    "nodes": [
+      "repository/server.cpp::apply_create_group",
+      "repository/server.cpp::handle_create_group",
+      "repository/server.cpp::dispatch_command"
+    ],
+    "answer": null,
+    "context_chars": 2581,
+    "latency_s": 0.01
+  },
+  {
+    "id": "q11",
+    "category": "multi-hop",
+    "system": "graph",
+    "question": "How does the server process a create_group command from a client?",
+    "retrieval_recall": 1.0,
+    "fact_recall": null,
+    "nodes": [
+      "repository/server.cpp::apply_create_group",
+      "repository/server.cpp::handle_create_group",
+      "repository/server.cpp::dispatch_command",
+      "repository/server.cpp::handle_sync_line",
+      "repository/server.cpp::append_journal_line_if_new",
+      "repository/server.cpp::send_line",
+      "repository/server.cpp::get_user_for_fd",
+      "repository/server.cpp::handle_client",
+      "repository/server.cpp::main",
+      "repository/server.cpp::handle_accept_request",
+      "repository/server.cpp::handle_join_group",
+      "repository/server.cpp::handle_stop_share",
+      "repository/server.cpp::handle_list_files",
+      "repository/server.cpp::handle_show_downloads",
+      "repository/server.cpp::handle_upload_file",
+      "repository/server.cpp::handle_list_groups",
+      "repository/server.cpp::handle_list_requests",
+      "repository/server.cpp::handle_create_user",
+      "repository/server.cpp::handle_logout",
+      "repository/server.cpp::handle_download_file",
+      "repository/server.cpp::handle_login"
+    ],
+    "answer": null,
+    "context_chars": 19234,
+    "latency_s": 0.01
+  },
+  {
+    "id": "q12",
+    "category": "conceptual",
+    "system": "vector",
+    "question": "What happens when a user tries to create a group without logging in?",
+    "retrieval_recall": 1.0,
+    "fact_recall": null,
+    "nodes": [
+      "repository/server.cpp::handle_create_group",
+      "repository/server.cpp::apply_create_group",
+      "repository/server.cpp::handle_join_group"
+    ],
+    "answer": null,
+    "context_chars": 2058,
+    "latency_s": 0.01
+  },
+  {
+    "id": "q12",
+    "category": "conceptual",
+    "system": "graph",
+    "question": "What happens when a user tries to create a group without logging in?",
+    "retrieval_recall": 1.0,
+    "fact_recall": null,
+    "nodes": [
+      "repository/server.cpp::handle_create_group",
+      "repository/server.cpp::apply_create_group",
+      "repository/server.cpp::handle_join_group",
+      "repository/server.cpp::dispatch_command",
+      "repository/server.cpp::get_user_for_fd",
+      "repository/server.cpp::send_line",
+      "repository/server.cpp::handle_sync_line",
+      "repository/server.cpp::append_journal_line_if_new"
+    ],
+    "answer": null,
+    "context_chars": 6864,
+    "latency_s": 0.01
+  },
+  {
+    "id": "q13",
+    "category": "callers",
+    "system": "vector",
+    "question": "Which functions call apply_create_user?",
+    "retrieval_recall": 0.5,
+    "fact_recall": null,
+    "nodes": [
+      "repository/server.cpp::handle_create_user",
+      "repository/server.cpp::apply_create_user",
+      "repository/server.cpp::handle_create_group"
+    ],
+    "answer": null,
+    "context_chars": 1612,
+    "latency_s": 0.01
+  },
+  {
+    "id": "q13",
+    "category": "callers",
+    "system": "graph",
+    "question": "Which functions call apply_create_user?",
+    "retrieval_recall": 1.0,
+    "fact_recall": null,
+    "nodes": [
+      "repository/server.cpp::handle_create_user",
+      "repository/server.cpp::apply_create_user",
+      "repository/server.cpp::handle_create_group",
+      "repository/server.cpp::dispatch_command",
+      "repository/server.cpp::send_line",
+      "repository/server.cpp::handle_sync_line",
+      "repository/server.cpp::append_journal_line_if_new",
+      "repository/server.cpp::get_user_for_fd",
+      "repository/server.cpp::apply_create_group"
+    ],
+    "answer": null,
+    "context_chars": 7142,
+    "latency_s": 0.01
+  },
+  {
+    "id": "q14",
+    "category": "callers",
+    "system": "vector",
+    "question": "Which functions call append_journal_line_if_new?",
+    "retrieval_recall": 0.0,
+    "fact_recall": null,
+    "nodes": [
+      "repository/server.cpp::append_journal_line_if_new",
+      "repository/server.cpp::load_journal_into_set",
+      "repository/server.cpp::flush_journal_to_fd"
+    ],
+    "answer": null,
+    "context_chars": 1224,
+    "latency_s": 0.01
+  },
+  {
+    "id": "q14",
+    "category": "callers",
+    "system": "graph",
+    "question": "Which functions call append_journal_line_if_new?",
+    "retrieval_recall": 1.0,
+    "fact_recall": null,
+    "nodes": [
+      "repository/server.cpp::append_journal_line_if_new",
+      "repository/server.cpp::load_journal_into_set",
+      "repository/server.cpp::flush_journal_to_fd",
+      "repository/server.cpp::apply_create_user",
+      "repository/server.cpp::apply_create_group",
+      "repository/server.cpp::apply_accept_request",
+      "repository/server.cpp::handle_upload_file",
+      "repository/server.cpp::handle_stop_share",
+      "repository/server.cpp::handle_sync_line",
+      "repository/server.cpp::main",
+      "repository/server.cpp::peer_connector_thread",
+      "repository/server.cpp::send_line",
+      "repository/server.cpp::read_journal_lines"
+    ],
+    "answer": null,
+    "context_chars": 15911,
+    "latency_s": 0.01
+  },
+  {
+    "id": "q15",
+    "category": "dependencies",
+    "system": "vector",
+    "question": "Which functions does handle_sync_line call?",
+    "retrieval_recall": 1.0,
+    "fact_recall": null,
+    "nodes": [
+      "repository/server.cpp::handle_sync_line",
+      "repository/server.cpp::sync_reader_thread",
+      "repository/client.cpp::send_line"
+    ],
+    "answer": null,
+    "context_chars": 3223,
+    "latency_s": 0.01
+  },
+  {
+    "id": "q15",
+    "category": "dependencies",
+    "system": "graph",
+    "question": "Which functions does handle_sync_line call?",
+    "retrieval_recall": 1.0,
+    "fact_recall": null,
+    "nodes": [
+      "repository/server.cpp::handle_sync_line",
+      "repository/server.cpp::sync_reader_thread",
+      "repository/client.cpp::send_line",
+      "repository/server.cpp::append_journal_line_if_new",
+      "repository/server.cpp::apply_create_user",
+      "repository/server.cpp::split_tokens",
+      "repository/server.cpp::apply_create_group",
+      "repository/server.cpp::apply_accept_request",
+      "repository/server.cpp::recv_line",
+      "repository/client.cpp::main",
+      "repository/client.cpp::send_all"
+    ],
+    "answer": null,
+    "context_chars": 12584,
+    "latency_s": 0.01
+  },
+  {
+    "id": "q16",
+    "category": "multi-hop",
+    "system": "vector",
+    "question": "How do two tracker servers synchronise their state with each other?",
+    "retrieval_recall": 0.25,
+    "fact_recall": null,
+    "nodes": [
+      "repository/client.cpp::connect_any_tracker",
+      "repository/server.cpp::handle_sync_line",
+      "repository/client.cpp::main"
+    ],
+    "answer": null,
+    "context_chars": 8252,
+    "latency_s": 0.01
+  },
+  {
+    "id": "q16",
+    "category": "multi-hop",
+    "system": "graph",
+    "question": "How do two tracker servers synchronise their state with each other?",
+    "retrieval_recall": 0.5,
+    "fact_recall": null,
+    "nodes": [
+      "repository/client.cpp::connect_any_tracker",
+      "repository/server.cpp::handle_sync_line",
+      "repository/client.cpp::main",
+      "repository/client.cpp::connect_to_addr",
+      "repository/server.cpp::sync_reader_thread",
+      "repository/server.cpp::append_journal_line_if_new",
+      "repository/server.cpp::apply_create_user",
+      "repository/server.cpp::split_tokens",
+      "repository/server.cpp::apply_create_group",
+      "repository/server.cpp::apply_accept_request",
+      "repository/client.cpp::trim_copy",
+      "repository/client.cpp::load_trackers",
+      "repository/client.cpp::recv_line",
+      "repository/client.cpp::send_line"
+    ],
+    "answer": null,
+    "context_chars": 14402,
+    "latency_s": 0.01
+  },
+  {
+    "id": "q17",
+    "category": "conceptual",
+    "system": "vector",
+    "question": "What is the from_sync parameter used for in the apply functions?",
+    "retrieval_recall": 1.0,
+    "fact_recall": null,
+    "nodes": [
+      "repository/server.cpp::handle_sync_line",
+      "repository/server.cpp::apply_create_user",
+      "repository/server.cpp::sync_reader_thread"
+    ],
+    "answer": null,
+    "context_chars": 3827,
+    "latency_s": 0.01
+  },
+  {
+    "id": "q17",
+    "category": "conceptual",
+    "system": "graph",
+    "question": "What is the from_sync parameter used for in the apply functions?",
+    "retrieval_recall": 1.0,
+    "fact_recall": null,
+    "nodes": [
+      "repository/server.cpp::handle_sync_line",
+      "repository/server.cpp::apply_create_user",
+      "repository/server.cpp::sync_reader_thread",
+      "repository/server.cpp::append_journal_line_if_new",
+      "repository/server.cpp::split_tokens",
+      "repository/server.cpp::apply_create_group",
+      "repository/server.cpp::apply_accept_request",
+      "repository/server.cpp::handle_create_user",
+      "repository/server.cpp::send_line",
+      "repository/server.cpp::recv_line"
+    ],
+    "answer": null,
+    "context_chars": 7204,
+    "latency_s": 0.01
+  },
+  {
+    "id": "q18",
+    "category": "conceptual",
+    "system": "vector",
+    "question": "How does the server tell a peer server connection apart from a client connection?",
+    "retrieval_recall": 1.0,
+    "fact_recall": null,
+    "nodes": [
+      "repository/server.cpp::peer_connector_thread",
+      "repository/server.cpp::sync_reader_thread",
+      "repository/server.cpp::main"
+    ],
+    "answer": null,
+    "context_chars": 7172,
+    "latency_s": 0.01
+  },
+  {
+    "id": "q18",
+    "category": "conceptual",
+    "system": "graph",
+    "question": "How does the server tell a peer server connection apart from a client connection?",
+    "retrieval_recall": 1.0,
+    "fact_recall": null,
+    "nodes": [
+      "repository/server.cpp::peer_connector_thread",
+      "repository/server.cpp::sync_reader_thread",
+      "repository/server.cpp::main",
+      "repository/server.cpp::flush_journal_to_fd",
+      "repository/server.cpp::send_line",
+      "repository/server.cpp::handle_sync_line",
+      "repository/server.cpp::recv_line",
+      "repository/server.cpp::dispatch_command",
+      "repository/server.cpp::load_journal_into_set",
+      "repository/server.cpp::split_tokens",
+      "repository/server.cpp::cleanup_fd"
+    ],
+    "answer": null,
+    "context_chars": 12840,
+    "latency_s": 0.01
+  },
+  {
+    "id": "q19",
+    "category": "conceptual",
+    "system": "vector",
+    "question": "What does a user need before they can upload a file to a group?",
+    "retrieval_recall": 1.0,
+    "fact_recall": null,
+    "nodes": [
+      "repository/server.cpp::handle_upload_file",
+      "repository/server.cpp::apply_create_group",
+      "repository/server.cpp::handle_download_file"
+    ],
+    "answer": null,
+    "context_chars": 3712,
+    "latency_s": 0.01
+  },
+  {
+    "id": "q19",
+    "category": "conceptual",
+    "system": "graph",
+    "question": "What does a user need before they can upload a file to a group?",
+    "retrieval_recall": 1.0,
+    "fact_recall": null,
+    "nodes": [
+      "repository/server.cpp::handle_upload_file",
+      "repository/server.cpp::apply_create_group",
+      "repository/server.cpp::handle_download_file",
+      "repository/server.cpp::dispatch_command",
+      "repository/server.cpp::get_user_for_fd",
+      "repository/server.cpp::append_journal_line_if_new",
+      "repository/server.cpp::send_line",
+      "repository/server.cpp::handle_create_group",
+      "repository/server.cpp::handle_sync_line"
+    ],
+    "answer": null,
+    "context_chars": 8971,
+    "latency_s": 0.01
+  },
+  {
+    "id": "q20",
+    "category": "multi-hop",
+    "system": "vector",
+    "question": "How does joining a group work, from the request to being accepted?",
+    "retrieval_recall": 1.0,
+    "fact_recall": null,
+    "nodes": [
+      "repository/server.cpp::handle_join_group",
+      "repository/server.cpp::apply_accept_request",
+      "repository/server.cpp::apply_create_group"
+    ],
+    "answer": null,
+    "context_chars": 2466,
+    "latency_s": 0.02
+  },
+  {
+    "id": "q20",
+    "category": "multi-hop",
+    "system": "graph",
+    "question": "How does joining a group work, from the request to being accepted?",
+    "retrieval_recall": 1.0,
+    "fact_recall": null,
+    "nodes": [
+      "repository/server.cpp::handle_join_group",
+      "repository/server.cpp::apply_accept_request",
+      "repository/server.cpp::apply_create_group",
+      "repository/server.cpp::dispatch_command",
+      "repository/server.cpp::get_user_for_fd",
+      "repository/server.cpp::send_line",
+      "repository/server.cpp::handle_accept_request",
+      "repository/server.cpp::handle_sync_line",
+      "repository/server.cpp::append_journal_line_if_new",
+      "repository/server.cpp::handle_create_group"
+    ],
+    "answer": null,
+    "context_chars": 8204,
+    "latency_s": 0.01
+  },
+  {
+    "id": "q21",
+    "category": "lookup",
+    "system": "vector",
+    "question": "What does handle_download_file send back to the client?",
+    "retrieval_recall": 1.0,
+    "fact_recall": null,
+    "nodes": [
+      "repository/server.cpp::handle_show_downloads",
+      "repository/server.cpp::handle_download_file",
+      "repository/server.cpp::handle_client"
+    ],
+    "answer": null,
+    "context_chars": 2154,
+    "latency_s": 0.01
+  },
+  {
+    "id": "q21",
+    "category": "lookup",
+    "system": "graph",
+    "question": "What does handle_download_file send back to the client?",
+    "retrieval_recall": 1.0,
+    "fact_recall": null,
+    "nodes": [
+      "repository/server.cpp::handle_show_downloads",
+      "repository/server.cpp::handle_download_file",
+      "repository/server.cpp::handle_client",
+      "repository/server.cpp::dispatch_command",
+      "repository/server.cpp::send_line",
+      "repository/server.cpp::get_user_for_fd",
+      "repository/server.cpp::cleanup_fd",
+      "repository/server.cpp::split_tokens",
+      "repository/server.cpp::recv_line"
+    ],
+    "answer": null,
+    "context_chars": 4880,
+    "latency_s": 0.01
+  },
+  {
+    "id": "q22",
+    "category": "conceptual",
+    "system": "vector",
+    "question": "Is the leave_group command implemented?",
+    "retrieval_recall": 1.0,
+    "fact_recall": null,
+    "nodes": [
+      "repository/server.cpp::handle_list_groups",
+      "repository/server.cpp::apply_create_group",
+      "repository/server.cpp::dispatch_command"
+    ],
+    "answer": null,
+    "context_chars": 2502,
+    "latency_s": 0.02
+  },
+  {
+    "id": "q22",
+    "category": "conceptual",
+    "system": "graph",
+    "question": "Is the leave_group command implemented?",
+    "retrieval_recall": 1.0,
+    "fact_recall": null,
+    "nodes": [
+      "repository/server.cpp::handle_list_groups",
+      "repository/server.cpp::apply_create_group",
+      "repository/server.cpp::dispatch_command",
+      "repository/server.cpp::send_line",
+      "repository/server.cpp::handle_create_group",
+      "repository/server.cpp::handle_sync_line",
+      "repository/server.cpp::append_journal_line_if_new",
+      "repository/server.cpp::handle_client",
+      "repository/server.cpp::main",
+      "repository/server.cpp::handle_accept_request",
+      "repository/server.cpp::handle_join_group",
+      "repository/server.cpp::handle_stop_share",
+      "repository/server.cpp::handle_list_files",
+      "repository/server.cpp::handle_show_downloads",
+      "repository/server.cpp::handle_upload_file",
+      "repository/server.cpp::handle_list_requests",
+      "repository/server.cpp::handle_create_user",
+      "repository/server.cpp::handle_logout",
+      "repository/server.cpp::handle_download_file",
+      "repository/server.cpp::handle_login"
+    ],
+    "answer": null,
+    "context_chars": 18996,
+    "latency_s": 0.01
+  },
+  {
+    "id": "q23",
+    "category": "lookup",
+    "system": "vector",
+    "question": "What does handle_show_downloads actually do?",
+    "retrieval_recall": 1.0,
+    "fact_recall": null,
+    "nodes": [
+      "repository/server.cpp::handle_show_downloads",
+      "repository/server.cpp::handle_download_file",
+      "repository/server.cpp::handle_client"
+    ],
+    "answer": null,
+    "context_chars": 2154,
+    "latency_s": 0.01
+  },
+  {
+    "id": "q23",
+    "category": "lookup",
+    "system": "graph",
+    "question": "What does handle_show_downloads actually do?",
+    "retrieval_recall": 1.0,
+    "fact_recall": null,
+    "nodes": [
+      "repository/server.cpp::handle_show_downloads",
+      "repository/server.cpp::handle_download_file",
+      "repository/server.cpp::handle_client",
+      "repository/server.cpp::dispatch_command",
+      "repository/server.cpp::send_line",
+      "repository/server.cpp::get_user_for_fd",
+      "repository/server.cpp::cleanup_fd",
+      "repository/server.cpp::split_tokens",
+      "repository/server.cpp::recv_line"
+    ],
+    "answer": null,
+    "context_chars": 4880,
+    "latency_s": 0.01
+  },
+  {
+    "id": "q24",
+    "category": "multi-hop",
+    "system": "vector",
+    "question": "Trace what happens on the server from receiving a create_user command until it is written to the journal.",
+    "retrieval_recall": 0.5,
+    "fact_recall": null,
+    "nodes": [
+      "repository/server.cpp::apply_create_user",
+      "repository/server.cpp::handle_create_user",
+      "repository/server.cpp::handle_sync_line"
+    ],
+    "answer": null,
+    "context_chars": 3615,
+    "latency_s": 0.02
+  },
+  {
+    "id": "q24",
+    "category": "multi-hop",
+    "system": "graph",
+    "question": "Trace what happens on the server from receiving a create_user command until it is written to the journal.",
+    "retrieval_recall": 1.0,
+    "fact_recall": null,
+    "nodes": [
+      "repository/server.cpp::apply_create_user",
+      "repository/server.cpp::handle_create_user",
+      "repository/server.cpp::handle_sync_line",
+      "repository/server.cpp::append_journal_line_if_new",
+      "repository/server.cpp::send_line",
+      "repository/server.cpp::dispatch_command",
+      "repository/server.cpp::sync_reader_thread",
+      "repository/server.cpp::split_tokens",
+      "repository/server.cpp::apply_create_group",
+      "repository/server.cpp::apply_accept_request"
+    ],
+    "answer": null,
+    "context_chars": 8115,
+    "latency_s": 0.01
+  },
+  {
+    "id": "q25",
+    "category": "callers",
+    "system": "vector",
+    "question": "Is handle_client called anywhere in the server?",
+    "retrieval_recall": 1.0,
+    "fact_recall": null,
+    "nodes": [
+      "repository/server.cpp::handle_client",
+      "repository/client.cpp::connect_to_addr",
+      "repository/server.cpp::handle_show_downloads"
+    ],
+    "answer": null,
+    "context_chars": 1548,
+    "latency_s": 0.01
+  },
+  {
+    "id": "q25",
+    "category": "callers",
+    "system": "graph",
+    "question": "Is handle_client called anywhere in the server?",
+    "retrieval_recall": 1.0,
+    "fact_recall": null,
+    "nodes": [
+      "repository/server.cpp::handle_client",
+      "repository/client.cpp::connect_to_addr",
+      "repository/server.cpp::handle_show_downloads",
+      "repository/server.cpp::cleanup_fd",
+      "repository/server.cpp::dispatch_command",
+      "repository/server.cpp::split_tokens",
+      "repository/server.cpp::recv_line",
+      "repository/client.cpp::connect_any_tracker",
+      "repository/server.cpp::send_line"
+    ],
+    "answer": null,
+    "context_chars": 4547,
+    "latency_s": 0.01
+  },
+  {
+    "id": "q26",
+    "category": "multi-hop",
+    "system": "vector",
+    "question": "What happens on the server when a client logs out?",
+    "retrieval_recall": 0.5,
+    "fact_recall": null,
+    "nodes": [
+      "repository/server.cpp::handle_logout",
+      "repository/server.cpp::handle_login",
+      "repository/server.cpp::handle_client"
+    ],
+    "answer": null,
+    "context_chars": 1172,
+    "latency_s": 0.01
+  },
+  {
+    "id": "q26",
+    "category": "multi-hop",
+    "system": "graph",
+    "question": "What happens on the server when a client logs out?",
+    "retrieval_recall": 1.0,
+    "fact_recall": null,
+    "nodes": [
+      "repository/server.cpp::handle_logout",
+      "repository/server.cpp::handle_login",
+      "repository/server.cpp::handle_client",
+      "repository/server.cpp::dispatch_command",
+      "repository/server.cpp::cleanup_fd",
+      "repository/server.cpp::send_line",
+      "repository/server.cpp::split_tokens",
+      "repository/server.cpp::recv_line"
+    ],
+    "answer": null,
+    "context_chars": 3660,
+    "latency_s": 0.01
+  }
+]

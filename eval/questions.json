@@ -1,0 +1,184 @@
+[
+  {
+    "id": "q01",
+    "category": "lookup",
+    "question": "What does connect_any_tracker do?",
+    "expected_functions": [["client.cpp::connect_any_tracker"]],
+    "expected_facts": [["connect_to_addr"], ["-1"], ["out_idx"]]
+  },
+  {
+    "id": "q02",
+    "category": "lookup",
+    "question": "How does connect_to_addr parse the address it is given?",
+    "expected_functions": [["client.cpp::connect_to_addr"]],
+    "expected_facts": [["colon", "':'", "\":\""], ["getaddrinfo"], ["port"]]
+  },
+  {
+    "id": "q03",
+    "category": "lookup",
+    "question": "What format does load_trackers expect in the tracker file?",
+    "expected_functions": [["client.cpp::load_trackers"]],
+    "expected_facts": [["line"], ["whitespace", "trim"], ["empty"]]
+  },
+  {
+    "id": "q04",
+    "category": "conceptual",
+    "question": "How does the client recover when the tracker it is connected to goes down?",
+    "expected_functions": [["client.cpp::main"], ["client.cpp::connect_any_tracker"]],
+    "expected_facts": [["next tracker", "another tracker", "connect_any_tracker"], ["auto-login", "relogin", "re-login", "log in again", "login again", "logs in again"], ["credentials", "saved_user"]]
+  },
+  {
+    "id": "q05",
+    "category": "conceptual",
+    "question": "How does the code make sure a whole message is sent over a socket?",
+    "expected_functions": [["client.cpp::send_all", "server.cpp::send_all"]],
+    "expected_facts": [["loop", "while"], ["EINTR"], ["remaining", "left", "partial"]]
+  },
+  {
+    "id": "q06",
+    "category": "callers",
+    "question": "Which functions call connect_to_addr?",
+    "expected_functions": [["client.cpp::connect_any_tracker"]],
+    "expected_facts": [["connect_any_tracker"]]
+  },
+  {
+    "id": "q07",
+    "category": "dependencies",
+    "question": "Which functions does the client's main function call?",
+    "expected_functions": [["client.cpp::main"], ["client.cpp::load_trackers"], ["client.cpp::connect_any_tracker"]],
+    "expected_facts": [["load_trackers"], ["connect_any_tracker"], ["send_line"], ["recv_line"], ["trim_copy"]]
+  },
+  {
+    "id": "q08",
+    "category": "conceptual",
+    "question": "How are lines read from a socket, and how are carriage returns handled?",
+    "expected_functions": [["client.cpp::recv_line", "server.cpp::recv_line"]],
+    "expected_facts": [["one byte", "byte by byte", "byte-by-byte", "1 byte", "one character", "character by character", "single character"], ["\\r", "carriage return"], ["newline", "\\n"]]
+  },
+  {
+    "id": "q09",
+    "category": "lookup",
+    "question": "What does append_journal_line_if_new do?",
+    "expected_functions": [["server.cpp::append_journal_line_if_new"]],
+    "expected_facts": [["sync_journal.log", "JOURNAL_FILE", "journal file"], ["journal_lines_set"], ["already present", "duplicate", "already exists", "already in"]]
+  },
+  {
+    "id": "q10",
+    "category": "conceptual",
+    "question": "How does the server avoid writing the same journal entry twice, including after a restart?",
+    "expected_functions": [["server.cpp::append_journal_line_if_new"], ["server.cpp::load_journal_into_set"]],
+    "expected_facts": [["journal_lines_set"], ["load_journal_into_set"]]
+  },
+  {
+    "id": "q11",
+    "category": "multi-hop",
+    "question": "How does the server process a create_group command from a client?",
+    "expected_functions": [["server.cpp::dispatch_command"], ["server.cpp::handle_create_group"], ["server.cpp::apply_create_group"]],
+    "expected_facts": [["dispatch_command"], ["handle_create_group"], ["apply_create_group"], ["login_required"]]
+  },
+  {
+    "id": "q12",
+    "category": "conceptual",
+    "question": "What happens when a user tries to create a group without logging in?",
+    "expected_functions": [["server.cpp::handle_create_group"]],
+    "expected_facts": [["login_required"], ["get_user_for_fd"]]
+  },
+  {
+    "id": "q13",
+    "category": "callers",
+    "question": "Which functions call apply_create_user?",
+    "expected_functions": [["server.cpp::handle_create_user"], ["server.cpp::handle_sync_line"]],
+    "expected_facts": [["handle_create_user"], ["handle_sync_line"]]
+  },
+  {
+    "id": "q14",
+    "category": "callers",
+    "question": "Which functions call append_journal_line_if_new?",
+    "expected_functions": [["server.cpp::apply_create_user"], ["server.cpp::apply_create_group"], ["server.cpp::apply_accept_request"], ["server.cpp::handle_upload_file"], ["server.cpp::handle_stop_share"], ["server.cpp::handle_sync_line"]],
+    "expected_facts": [["apply_create_user"], ["apply_create_group"], ["apply_accept_request"], ["handle_upload_file"], ["handle_stop_share"], ["handle_sync_line"]]
+  },
+  {
+    "id": "q15",
+    "category": "dependencies",
+    "question": "Which functions does handle_sync_line call?",
+    "expected_functions": [["server.cpp::handle_sync_line"]],
+    "expected_facts": [["append_journal_line_if_new"], ["split_tokens"], ["apply_create_user"], ["apply_create_group"], ["apply_accept_request"]]
+  },
+  {
+    "id": "q16",
+    "category": "multi-hop",
+    "question": "How do two tracker servers synchronise their state with each other?",
+    "expected_functions": [["server.cpp::peer_connector_thread"], ["server.cpp::flush_journal_to_fd"], ["server.cpp::sync_reader_thread"], ["server.cpp::handle_sync_line"]],
+    "expected_facts": [["SYNC_INIT"], ["journal"], ["flush_journal_to_fd"], ["handle_sync_line"]]
+  },
+  {
+    "id": "q17",
+    "category": "conceptual",
+    "question": "What is the from_sync parameter used for in the apply functions?",
+    "expected_functions": [["server.cpp::apply_create_user", "server.cpp::apply_create_group", "server.cpp::apply_accept_request"]],
+    "expected_facts": [["rebroadcast", "re-broadcast", "broadcasting", "send it back", "sending it back", "forward"], ["journal"]]
+  },
+  {
+    "id": "q18",
+    "category": "conceptual",
+    "question": "How does the server tell a peer server connection apart from a client connection?",
+    "expected_functions": [["server.cpp::main"]],
+    "expected_facts": [["SYNC_INIT"], ["first line", "firstline"]]
+  },
+  {
+    "id": "q19",
+    "category": "conceptual",
+    "question": "What does a user need before they can upload a file to a group?",
+    "expected_functions": [["server.cpp::handle_upload_file"]],
+    "expected_facts": [["logged in", "login"], ["member"]]
+  },
+  {
+    "id": "q20",
+    "category": "multi-hop",
+    "question": "How does joining a group work, from the request to being accepted?",
+    "expected_functions": [["server.cpp::handle_join_group"], ["server.cpp::handle_accept_request", "server.cpp::apply_accept_request"]],
+    "expected_facts": [["pending"], ["owner"], ["accept_request"]]
+  },
+  {
+    "id": "q21",
+    "category": "lookup",
+    "question": "What does handle_download_file send back to the client?",
+    "expected_functions": [["server.cpp::handle_download_file"]],
+    "expected_facts": [["peers"], ["owner"], ["no_such_file"]]
+  },
+  {
+    "id": "q22",
+    "category": "conceptual",
+    "question": "Is the leave_group command implemented?",
+    "expected_functions": [["server.cpp::dispatch_command"]],
+    "expected_facts": [["not_implemented", "not implemented"]]
+  },
+  {
+    "id": "q23",
+    "category": "lookup",
+    "question": "What does handle_show_downloads actually do?",
+    "expected_functions": [["server.cpp::handle_show_downloads"]],
+    "expected_facts": [["no_downloads"], ["stub", "placeholder", "always"]]
+  },
+  {
+    "id": "q24",
+    "category": "multi-hop",
+    "question": "Trace what happens on the server from receiving a create_user command until it is written to the journal.",
+    "expected_functions": [["server.cpp::dispatch_command"], ["server.cpp::handle_create_user"], ["server.cpp::apply_create_user"], ["server.cpp::append_journal_line_if_new"]],
+    "expected_facts": [["dispatch_command"], ["handle_create_user"], ["apply_create_user"], ["append_journal_line_if_new"], ["SYNC_CREATE_USER"]]
+  },
+  {
+    "id": "q25",
+    "category": "callers",
+    "question": "Is handle_client called anywhere in the server?",
+    "expected_functions": [["server.cpp::handle_client"]],
+    "expected_facts": [["not called", "never called", "isn't called", "is not called", "unused", "not used", "no callers", "none", "dead code", "lambda", "client_thread_func"]]
+  },
+  {
+    "id": "q26",
+    "category": "multi-hop",
+    "question": "What happens on the server when a client logs out?",
+    "expected_functions": [["server.cpp::handle_logout"], ["server.cpp::cleanup_fd"]],
+    "expected_facts": [["sessions"], ["cleanup_fd"], ["logged_out"]]
+  }
+]

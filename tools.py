@@ -35,12 +35,12 @@ def build_context(nodes):
     return context
 
 
-def search_code(question):
+def search_code(question, n_results=3):
 
     question_embedding = embedding_model.encode(question)
 
     results = collection.query(
-        query_embeddings=[question_embedding.tolist()], n_results=3
+        query_embeddings=[question_embedding.tolist()], n_results=n_results
     )
 
     return results

@@ -1,10 +1,16 @@
+import os
+
 from ollama import chat
+
+# override with e.g. LLM_MODEL=llama3.2 for a lighter model
+MODEL = os.environ.get("LLM_MODEL", "llama3")
 
 
 def decide_action(conversation):
 
     response = chat(
-        model="llama3",
+        model=MODEL,
+        options={"temperature": 0},
         messages=[
             {
                 "role": "user",
