@@ -7,6 +7,8 @@ import os
 CPP_LANGUAGE = Language(tscpp.language())
 parser = Parser(CPP_LANGUAGE)
 
+SOURCE_EXTENSIONS = (".cpp", ".cc", ".cxx", ".h", ".hpp")
+
 call_graph = {}
 repository_functions = set()
 
@@ -102,7 +104,7 @@ for root, dirs, files in os.walk("repository"):
         continue
 
     for file in files:
-        if not file.endswith(".cpp"):
+        if not file.endswith(SOURCE_EXTENSIONS):
             continue
 
         path = os.path.join(root, file)
@@ -124,7 +126,7 @@ for root, dirs, files in os.walk("repository"):
         continue
 
     for file in files:
-        if not file.endswith(".cpp"):
+        if not file.endswith(SOURCE_EXTENSIONS):
             continue
 
         path = os.path.join(root, file)
@@ -156,10 +158,10 @@ for func, calls in call_graph.items():
         G.add_edge(func, call)
 
 
-with open("call_graph.pkl", "wb") as f:
+with open("data/call_graph.pkl", "wb") as f:
     pickle.dump(call_graph, f)
 
-with open("graph.pkl", "wb") as f:
+with open("data/graph.pkl", "wb") as f:
     pickle.dump(G, f)
 
 for func in call_graph:

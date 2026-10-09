@@ -1,1 +1,6 @@
 /repository
+.venv/
+__pycache__/
+*.pyc
+chroma_db/
+.DS_Store

@@ -1,15 +1,21 @@
 import os
-from ollama import chat
 from sentence_transformers import SentenceTransformer
-from sklearn.metrics.pairwise import cosine_similarity
 import chromadb
 from tree_sitter import Language, Parser
 import tree_sitter_cpp as tscpp
 import pickle
 
 
+SOURCE_EXTENSIONS = (".cpp", ".cc", ".cxx", ".h", ".hpp")
+
 embedding_model = SentenceTransformer("all-MiniLM-L6-v2")
+
 client = chromadb.PersistentClient(path="./chroma_db")
+
+# start from an empty collection so re-running ingestion does not
+# collide with ids or keep stale chunks from earlier runs
+if "code_chunks" in [c.name for c in client.list_collections()]:
+    client.delete_collection(name="code_chunks")
 
 collection = client.get_or_create_collection(name="code_chunks")
 
@@ -40,7 +46,7 @@ def traverse(node):
 
         embedding = embedding_model.encode(embedding_text)
 
-        collection.add(
+        collection.upsert(
             ids=[f"{path}_{function_name}"],
             embeddings=[embedding.tolist()],
             documents=[function_text],
@@ -62,6 +68,9 @@ for root, dirs, files in os.walk("repository"):
         continue
 
     for file in files:
+        if not file.endswith(SOURCE_EXTENSIONS):
+            continue
+
         path = os.path.join(root, file)
 
         with open(path, "r", errors="ignore") as f:
@@ -71,7 +80,7 @@ for root, dirs, files in os.walk("repository"):
             root_node = tree.root_node
             traverse(root_node)
 
-with open("function_lookup.pkl", "wb") as f:
+with open("data/function_lookup.pkl", "wb") as f:
     pickle.dump(function_lookup, f)
 
 print("Ingestion complete")
