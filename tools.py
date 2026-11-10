@@ -3,7 +3,7 @@ import pickle
 
 import chromadb
 
-from indexer import COLLECTION_NAME, get_embedding_model
+from indexer import COLLECTION_NAME, get_embedding_model, match_key
 from planner import decide_action
 
 # the bundled sample repository; the web app switches to other repos
@@ -98,7 +98,10 @@ def find_graph_nodes(function_name):
     matches = []
 
     for node in active_index().call_graph:
-        if node.endswith(f"::{short_name}"):
+        name = node.split("::", 1)[1]
+
+        # "bar" finds C++ "Foo::bar" and Python "Foo.bar"; "Foo.bar" finds itself
+        if name == short_name or match_key(name) == short_name:
             matches.append(node)
 
     return matches

@@ -306,16 +306,21 @@ Paste any public GitHub link and ask questions about that codebase:
 streamlit run app.py
 ```
 
-1. Paste a link such as `https://github.com/antirez/kilo` in the sidebar and click **Load repository**.
+1. Paste a link such as `https://github.com/psf/requests` or `https://github.com/antirez/kilo` in the sidebar and click **Load repository**.
    The repo is shallow-cloned, parsed with Tree-sitter, embedded and turned into a call graph
    (Lua, 68 files / 1,300 functions, takes about 15 seconds).
-2. Ask questions in the chat. Each answer shows the agent's tool calls and the functions it used.
-3. Previously indexed repositories stay available in the dropdown; tick
+2. Ask questions in the chat. Each answer shows the agent's tool calls, the functions it used,
+   and a call graph of how those functions connect.
+3. Open the **Call graph** tab to explore: pick any function and see its callers and callees
+   up to three levels out, with its source code.
+4. Previously indexed repositories stay available in the dropdown; tick
    **Re-clone and re-index** to pull the latest code.
 
 Each repository gets its own folder in `workspaces/` (git-ignored) with its clone,
 vector index and call graph. The cloned code is only parsed, never built or run.
-Only C and C++ repositories are supported for now.
+C, C++ and Python repositories are supported. For Python, methods are named
+`Class.method`, and `obj.method()` calls are only linked when the method name is
+unambiguous in the repo (so `d.get()` on a dict does not link to some `Foo.get`).
 
 ---
 
@@ -385,6 +390,7 @@ Codebase-Intelligence-Agent/
 ├── app.py                   # Streamlit web interface
 ├── workspace.py             # Clone a GitHub repo into workspaces/ and index it
 ├── indexer.py               # Tree-sitter parsing, embeddings, call graph
+├── graph_view.py            # Call graph drawings for the web interface
 │
 ├── ingest.py                # Index the bundled sample repo
 ├── build_call_graph.py      # Same as ingest.py (kept for old instructions)
@@ -424,7 +430,7 @@ Codebase-Intelligence-Agent/
 - Repository summarization
 - Cross-file reasoning
 - Code editing agent
-- Support for multiple programming languages
+- More languages (JavaScript/TypeScript, Java, Go)
 
 ---
 

@@ -127,7 +127,7 @@ def prepare_repository(url, refresh=False, progress=None):
         stats = index_repository(paths["source"], paths["chroma"], paths["data"], progress=report)
 
         if stats["functions"] == 0:
-            raise RuntimeError("No C/C++ functions found. Only C and C++ repositories are supported for now.")
+            raise RuntimeError("No C/C++ or Python functions found. Only C, C++ and Python repositories are supported for now.")
 
     except Exception:
         # don't leave a half-built workspace that would show up later
