@@ -22,7 +22,7 @@ SAMPLE = {
 
 AGENTS = {
     "LangGraph agent": "langgraph",
-    "Hand-written agent": "agent",
+    "Baseline (hand-written loop)": "agent",
 }
 
 
