@@ -69,7 +69,7 @@ def semantic_context(query):
         context += document
         context += "\n"
 
-        nodes.append(f"{metadata['path']}::{metadata['function_name'].split('(')[0]}")
+        nodes.append(metadata.get("node") or f"{metadata['path']}::{metadata['function_name'].split('(')[0]}")
 
     return context, nodes
 

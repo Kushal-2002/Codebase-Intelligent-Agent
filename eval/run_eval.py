@@ -52,7 +52,7 @@ TOP_K = 3
 
 def node_from_metadata(metadata):
 
-    return f"{metadata['path']}::{metadata['function_name'].split('(')[0]}"
+    return metadata.get("node") or f"{metadata['path']}::{metadata['function_name'].split('(')[0]}"
 
 
 def build_context(nodes):

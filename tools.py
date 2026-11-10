@@ -1,23 +1,68 @@
-from sentence_transformers import SentenceTransformer
-import chromadb
+import os
 import pickle
-import networkx as nx
+
+import chromadb
+
+from indexer import COLLECTION_NAME, get_embedding_model
 from planner import decide_action
 
-embedding_model = SentenceTransformer("all-MiniLM-L6-v2")
+# the bundled sample repository; the web app switches to other repos
+# with load_index()
+DEFAULT_CHROMA_PATH = "./chroma_db"
+DEFAULT_DATA_DIR = "data"
 
-client = chromadb.PersistentClient(path="./chroma_db")
+_index = None
 
-collection = client.get_or_create_collection(name="code_chunks")
 
-with open("data/call_graph.pkl", "rb") as f:
-    call_graph = pickle.load(f)
+class Index:
 
-with open("data/function_lookup.pkl", "rb") as f:
-    function_lookup = pickle.load(f)
+    def __init__(self, chroma_path, data_dir):
 
-with open("data/graph.pkl", "rb") as f:
-    G = pickle.load(f)
+        self.key = (os.path.abspath(chroma_path), os.path.abspath(data_dir))
+
+        client = chromadb.PersistentClient(path=chroma_path)
+        self.collection = client.get_or_create_collection(name=COLLECTION_NAME)
+
+        with open(os.path.join(data_dir, "call_graph.pkl"), "rb") as f:
+            self.call_graph = pickle.load(f)
+
+        with open(os.path.join(data_dir, "function_lookup.pkl"), "rb") as f:
+            self.function_lookup = pickle.load(f)
+
+        with open(os.path.join(data_dir, "graph.pkl"), "rb") as f:
+            self.G = pickle.load(f)
+
+
+def load_index(chroma_path=DEFAULT_CHROMA_PATH, data_dir=DEFAULT_DATA_DIR):
+
+    # make every tool below work on this index (no-op if already active)
+
+    global _index
+
+    key = (os.path.abspath(chroma_path), os.path.abspath(data_dir))
+
+    if _index is None or _index.key != key:
+        _index = Index(chroma_path, data_dir)
+
+    return _index
+
+
+def reset_index():
+
+    # forget the open index, e.g. after its folder was deleted and rebuilt;
+    # chroma also caches one client per path, which would point at the old files
+
+    global _index
+
+    from chromadb.api.client import SharedSystemClient
+
+    _index = None
+    SharedSystemClient.clear_system_cache()
+
+
+def active_index():
+
+    return _index if _index is not None else load_index()
 
 
 def build_context(nodes):
@@ -37,9 +82,9 @@ def build_context(nodes):
 
 def search_code(question, n_results=3):
 
-    question_embedding = embedding_model.encode(question)
+    question_embedding = get_embedding_model().encode(question)
 
-    results = collection.query(
+    results = active_index().collection.query(
         query_embeddings=[question_embedding.tolist()], n_results=n_results
     )
 
@@ -52,7 +97,7 @@ def find_graph_nodes(function_name):
 
     matches = []
 
-    for node in call_graph:
+    for node in active_index().call_graph:
         if node.endswith(f"::{short_name}"):
             matches.append(node)
 
@@ -61,7 +106,10 @@ def find_graph_nodes(function_name):
 
 def get_dependencies(node):
 
-    if node is None:
+    G = active_index().G
+
+    # functions with no call edges were never added as graph nodes in older indexes
+    if node is None or node not in G:
         return []
 
     return list(G.successors(node))
@@ -69,7 +117,9 @@ def get_dependencies(node):
 
 def get_callers(node):
 
-    if node is None:
+    G = active_index().G
+
+    if node is None or node not in G:
         return []
 
     return list(G.predecessors(node))
@@ -77,7 +127,7 @@ def get_callers(node):
 
 def get_source(node):
 
-    return function_lookup.get(node, "")
+    return active_index().function_lookup.get(node, "")
 
 
 def retrieve_context(question):

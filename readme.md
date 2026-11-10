@@ -298,6 +298,27 @@ and returns the first successful socket connection.
 
 ---
 
+# Web Interface
+
+Paste any public GitHub link and ask questions about that codebase:
+
+```bash
+streamlit run app.py
+```
+
+1. Paste a link such as `https://github.com/antirez/kilo` in the sidebar and click **Load repository**.
+   The repo is shallow-cloned, parsed with Tree-sitter, embedded and turned into a call graph
+   (Lua, 68 files / 1,300 functions, takes about 15 seconds).
+2. Ask questions in the chat. Each answer shows the agent's tool calls and the functions it used.
+3. Previously indexed repositories stay available in the dropdown; tick
+   **Re-clone and re-index** to pull the latest code.
+
+Each repository gets its own folder in `workspaces/` (git-ignored) with its clone,
+vector index and call graph. The cloned code is only parsed, never built or run.
+Only C and C++ repositories are supported for now.
+
+---
+
 # LangGraph Agent
 
 `agent_langgraph.py` rebuilds the agent loop as a LangGraph `StateGraph`:
@@ -360,11 +381,14 @@ Codebase-Intelligence-Agent/
 ├── agent_langgraph.py       # Same agent as a LangGraph state machine
 ├── planner.py               # Planner LLM (hand-written agent)
 ├── llm.py                   # Ollama / Gemini switch used everywhere
-├── tools.py                 # Tool implementations
+├── tools.py                 # Tool implementations (switchable index)
+├── app.py                   # Streamlit web interface
+├── workspace.py             # Clone a GitHub repo into workspaces/ and index it
+├── indexer.py               # Tree-sitter parsing, embeddings, call graph
 │
-├── build_embeddings.py
-├── build_call_graph.py
-├── build_lookup.py
+├── ingest.py                # Index the bundled sample repo
+├── build_call_graph.py      # Same as ingest.py (kept for old instructions)
+├── eval/                    # Benchmark questions, runner, results
 │
 ├── chroma_db/
 │
@@ -400,7 +424,6 @@ Codebase-Intelligence-Agent/
 - Repository summarization
 - Cross-file reasoning
 - Code editing agent
-- Streamlit interface
 - Support for multiple programming languages
 
 ---
