@@ -1,9 +1,11 @@
 """
-Compare three retrieval setups on eval/questions.json.
+Compare four retrieval setups on eval/questions.json.
 
-    vector  - top-k semantic search only
-    graph   - top-k semantic search, expanded with 1-hop callers and dependencies
-    agent   - the planner-driven tool loop in agent.py
+    vector     - top-k semantic search only
+    graph      - top-k semantic search, expanded with 1-hop callers and dependencies
+    agent      - the hand-written planner tool loop in agent.py
+    langgraph  - the same agent as a LangGraph state machine with native tool
+                 calling (agent_langgraph.py; needs a tool-capable model)
 
 Metrics per question:
     retrieval_recall  - fraction of expected function groups that were retrieved
@@ -13,12 +15,13 @@ Metrics per question:
     context_chars     - size of the context handed to the answer LLM
     latency_s         - wall time for retrieval + answer generation
 
-Run from the project root (Ollama must be running for answers):
+Run from the project root (Ollama, or a Gemini key, is needed for answers):
 
     python eval/run_eval.py
     python eval/run_eval.py --retrieval-only
     python eval/run_eval.py --systems vector,agent --ids q01,q14
-    LLM_MODEL=llama3.2 python eval/run_eval.py
+    LLM_PROVIDER=gemini python eval/run_eval.py
+    LLM_MODEL=qwen2.5 python eval/run_eval.py
 """
 
 import argparse
@@ -37,7 +40,8 @@ os.chdir(ROOT)
 
 from tools import search_code, get_callers, get_dependencies, get_source  # noqa: E402
 from agent import run_agent, generate_answer  # noqa: E402
-from planner import MODEL  # noqa: E402
+from agent_langgraph import run_langgraph_agent  # noqa: E402
+from llm import MODEL, PROVIDER  # noqa: E402
 
 REPO_PREFIX = "repository/"
 TOP_K = 3
@@ -105,7 +109,7 @@ def run_retrieval_system(retrieve, question, with_answer):
     }
 
 
-def run_agent_system(question):
+def run_agent_system(question, agent_fn):
 
     start = time.time()
 
@@ -116,7 +120,7 @@ def run_agent_system(question):
 
     # the planner prints every step; keep the eval output readable
     with contextlib.redirect_stdout(io.StringIO()):
-        result = run_agent(question, verbose=False, on_step=on_step)
+        result = agent_fn(question, on_step=on_step)
 
     print(file=sys.stderr)
 
@@ -214,19 +218,19 @@ def print_summary(rows, systems):
 def main():
 
     parser = argparse.ArgumentParser()
-    parser.add_argument("--systems", default="vector,graph,agent")
+    parser.add_argument("--systems", default="vector,graph,agent,langgraph")
     parser.add_argument("--ids", default=None, help="comma separated question ids")
     parser.add_argument(
         "--retrieval-only",
         action="store_true",
-        help="skip answer generation (no Ollama needed); agent is skipped",
+        help="skip answer generation (no LLM needed); the agents are skipped",
     )
     args = parser.parse_args()
 
     systems = args.systems.split(",")
 
-    if args.retrieval_only and "agent" in systems:
-        systems.remove("agent")
+    if args.retrieval_only:
+        systems = [s for s in systems if s not in ("agent", "langgraph")]
 
     with open("eval/questions.json") as f:
         questions = json.load(f)
@@ -239,7 +243,7 @@ def main():
 
     total = len(questions) * len(systems)
 
-    print(f"Model: {MODEL} | {len(questions)} questions x {len(systems)} systems = {total} runs")
+    print(f"Model: {PROVIDER}/{MODEL} | {len(questions)} questions x {len(systems)} systems = {total} runs")
     print("Press Ctrl+C to stop early; finished runs are still saved.\n", flush=True)
 
     run_start = time.time()
@@ -251,14 +255,18 @@ def main():
                 elapsed = time.time() - run_start
                 eta = f", ~{elapsed / done * (total - done) / 60:.0f} min left" if done else ""
 
-                print(f"[{done + 1}/{total}{eta}] {q['id']} {system:<6} ...", end="", flush=True)
+                print(f"[{done + 1}/{total}{eta}] {q['id']} {system:<9} ...", end="", flush=True)
 
                 if system == "vector":
                     result = run_retrieval_system(vector_retrieve, q["question"], not args.retrieval_only)
                 elif system == "graph":
                     result = run_retrieval_system(graph_retrieve, q["question"], not args.retrieval_only)
                 elif system == "agent":
-                    result = run_agent_system(q["question"])
+                    result = run_agent_system(
+                        q["question"], lambda question, on_step: run_agent(question, verbose=False, on_step=on_step)
+                    )
+                elif system == "langgraph":
+                    result = run_agent_system(q["question"], run_langgraph_agent)
                 else:
                     raise ValueError(f"unknown system {system}")
 
@@ -266,6 +274,7 @@ def main():
                     "id": q["id"],
                     "category": q["category"],
                     "system": system,
+                    "provider": PROVIDER,
                     "model": MODEL,
                     "question": q["question"],
                     "retrieval_recall": retrieval_recall(q["expected_functions"], result["nodes"]),

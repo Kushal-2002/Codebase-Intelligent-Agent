@@ -1,5 +1,4 @@
-from ollama import chat
-
+from llm import complete
 from tools import retrieve_context
 
 
@@ -10,12 +9,8 @@ relevant_text = retrieve_context(question)
 print("\nCONTEXT LENGTH =", len(relevant_text))
 
 
-response = chat(
-    model="llama3",
-    messages=[
-        {
-            "role": "user",
-            "content": f"""
+response = complete(
+    f"""
 You are a codebase assistant.
 
 Answer ONLY using the repository context.
@@ -28,9 +23,7 @@ Repository Context:
 
 Question:
 {question}
-""",
-        }
-    ],
+"""
 )
 
-print(response.message.content)
+print(response)

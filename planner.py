@@ -1,20 +1,10 @@
-import os
-
-from ollama import chat
-
-# override with e.g. LLM_MODEL=llama3.2 for a lighter model
-MODEL = os.environ.get("LLM_MODEL", "llama3")
+from llm import complete
 
 
 def decide_action(conversation):
 
-    response = chat(
-        model=MODEL,
-        options={"temperature": 0},
-        messages=[
-            {
-                "role": "user",
-                "content": f"""
+    response = complete(
+        f"""
 You are an autonomous codebase agent.
 
 You have three available tools.
@@ -62,12 +52,10 @@ Rules:
 Conversation:
 
 {conversation}
-""",
-            }
-        ],
+"""
     )
 
-    response = response.message.content.strip()
+    response = response.strip()
 
     print("\nPLANNER OUTPUT:")
     print(response)

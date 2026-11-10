@@ -1,0 +1,83 @@
+[
+  {
+    "id": "q01",
+    "category": "lookup",
+    "system": "agent",
+    "provider": "gemini",
+    "model": "gemini-3.5-flash",
+    "question": "What does connect_any_tracker do?",
+    "retrieval_recall": 1.0,
+    "fact_recall": 1.0,
+    "answer": "Based on the provided code, `connect_any_tracker` attempts to connect to any available tracker address from a list of trackers. \n\nSpecifically, it performs the following steps:\n\n1. **Empty Check:** If the `trackers` vector is empty, it sets the output parameter `out_idx` to `-1` and returns `-1`.\n2. **Iterate with Wrap-Around:** It iterates through the list of trackers starting at index `start_idx` and wraps around using modulo arithmetic (`(start_idx + i) % n`).\n3. **Attempt Connection:** For each tracker address at `trackers[idx]`, it calls `connect_to_addr(trackers[idx])`.\n4. **On Success:** If a connection is successfully established (returns a socket descriptor `s >= 0`), it sets `out_idx` to the index of that successful tracker (`idx`) and returns the socket file descriptor `s`.\n5. **On Failure:** If it iterates through all trackers without successfully connecting to any of them, it sets `out_idx` to `-1` and returns `-1`.",
+    "nodes": [
+      "repository/client.cpp::connect_any_tracker",
+      "repository/client.cpp::main",
+      "repository/server.cpp::peer_connector_thread"
+    ],
+    "steps": 1,
+    "finished": true,
+    "context_chars": 8414,
+    "latency_s": 9.1
+  },
+  {
+    "id": "q01",
+    "category": "lookup",
+    "system": "langgraph",
+    "provider": "gemini",
+    "model": "gemini-3.5-flash",
+    "question": "What does connect_any_tracker do?",
+    "retrieval_recall": 1.0,
+    "fact_recall": 1.0,
+    "answer": "Based on the code provided in `repository/client.cpp`, **`connect_any_tracker`** attempts to establish a socket connection to any reachable tracker from a list of tracker addresses.\n\n### Detailed Behavior:\n1. **Empty List Check**: If the `trackers` vector is empty, it sets `out_idx = -1` and returns `-1`.\n2. **Cyclic Search**: It iterates through the list of tracker addresses starting at index `start_idx` and wraps around using modulo arithmetic (`(start_idx + i) % n`).\n3. **Connection Attempt**: For each address, it attempts to connect using `connect_to_addr(trackers[idx])`.\n4. **Success**: If a connection succeeds (returns a socket descriptor `s >= 0`), it sets the reference parameter `out_idx` to the index of the connected tracker and returns the socket descriptor `s`.\n5. **Failure**: If it checks all trackers in the list and fails to connect to any of them, it sets `out_idx = -1` and returns `-1`.",
+    "nodes": [
+      "repository/client.cpp::connect_any_tracker",
+      "repository/client.cpp::main",
+      "repository/server.cpp::peer_connector_thread",
+      "repository/client.cpp::connect_to_addr"
+    ],
+    "steps": 2,
+    "finished": true,
+    "context_chars": 9492,
+    "latency_s": 9.41
+  },
+  {
+    "id": "q02",
+    "category": "lookup",
+    "system": "agent",
+    "provider": "gemini",
+    "model": "gemini-3.5-flash",
+    "question": "How does connect_to_addr parse the address it is given?",
+    "retrieval_recall": 1.0,
+    "fact_recall": 1.0,
+    "answer": "Based on the provided code for `connect_to_addr`, the address string (formatted as `host:port`) is parsed as follows:\n\n1. **Find Delimiter:** It searches for the colon character (`:`) in the `addr` string using `addr.find(':')`.\n2. **Validate:** If no colon is found (`p == string::npos`), parsing fails and the function returns `-1`.\n3. **Extract Substrings:**\n   - **Host:** Extracted using `addr.substr(0, p)` (everything before the colon).\n   - **Port:** Extracted using `addr.substr(p + 1)` (everything after the colon).\n\nThese extracted `host` and `port` strings are then converted to C-strings (`.c_str()`) and passed into `getaddrinfo`.",
+    "nodes": [
+      "repository/client.cpp::connect_to_addr",
+      "repository/server.cpp::peer_connector_thread",
+      "repository/server.cpp::main"
+    ],
+    "steps": 1,
+    "finished": true,
+    "context_chars": 7706,
+    "latency_s": 7.72
+  },
+  {
+    "id": "q02",
+    "category": "lookup",
+    "system": "langgraph",
+    "provider": "gemini",
+    "model": "gemini-3.5-flash",
+    "question": "How does connect_to_addr parse the address it is given?",
+    "retrieval_recall": 1.0,
+    "fact_recall": 0.6666666666666666,
+    "answer": "Based on the code for `connect_to_addr` in `repository/client.cpp`, the address string (expected format `host:port`) is parsed as follows:\n\n1. It searches for the colon character (`:`) using `addr.find(':')`.\n2. If no colon is found, the parsing fails and the function returns `-1`.\n3. If a colon is found at position `p`:\n   - The **host** is extracted as the substring from index `0` up to position `p` (`addr.substr(0, p)`).\n   - The **port** is extracted as the substring starting after position `p` to the end of the string (`addr.substr(p + 1)`).",
+    "nodes": [
+      "repository/client.cpp::connect_to_addr",
+      "repository/server.cpp::peer_connector_thread",
+      "repository/server.cpp::main"
+    ],
+    "steps": 1,
+    "finished": true,
+    "context_chars": 7706,
+    "latency_s": 6.12
+  }
+]

@@ -57,8 +57,8 @@ Instead of relying only on semantic search, the agent reasons over a repository'
 - Sentence Transformers
 - ChromaDB
 - NetworkX
-- Ollama
-- Llama 3
+- LangGraph + LangChain (tool-calling agent)
+- Ollama (Llama 3.1, local) or Google Gemini API
 
 ---
 
@@ -298,13 +298,68 @@ and returns the first successful socket connection.
 
 ---
 
+# LangGraph Agent
+
+`agent_langgraph.py` rebuilds the agent loop as a LangGraph `StateGraph`:
+
+```
+seed ──> planner ──(tool call)──> tools ──┐
+            ^                             │
+            └─────────────────────────────┘
+         planner ──(done / step limit)──> answer ──> END
+```
+
+- **seed**: semantic search, so the planner sees which functions exist
+- **planner**: LLM with the three tools bound via native tool calling (no regex parsing)
+- **tools**: LangGraph `ToolNode` running `search_code`, `get_callers`, `get_dependencies`
+- **answer**: grounded answer from the collected observations
+
+The tools and the answer prompt are shared with `agent.py`, so the benchmark
+compares orchestration only. Print the graph with `python agent_langgraph.py --diagram`.
+
+---
+
+# Choosing the LLM
+
+All LLM calls go through `llm.py`:
+
+```bash
+# local (default)
+ollama pull llama3.1
+python agent_langgraph.py
+
+# Google Gemini
+cp .env.example .env        # then put your GOOGLE_API_KEY in .env
+LLM_PROVIDER=gemini python agent_langgraph.py
+```
+
+`LLM_MODEL` overrides the model name. The original `llama3` does not support
+tool calling in Ollama, so the default is `llama3.1`.
+
+---
+
+# Evaluation
+
+```bash
+python eval/run_eval.py                          # vector, graph, agent, langgraph
+python eval/run_eval.py --systems agent,langgraph
+LLM_PROVIDER=gemini python eval/run_eval.py
+python eval/run_eval.py --retrieval-only         # no LLM needed
+```
+
+Results are saved per question in `eval/results/`.
+
+---
+
 # Project Structure
 
 ```
 Codebase-Intelligence-Agent/
 │
-├── agent.py                 # Agent loop
-├── planner.py               # Planner LLM
+├── agent.py                 # Hand-written agent loop
+├── agent_langgraph.py       # Same agent as a LangGraph state machine
+├── planner.py               # Planner LLM (hand-written agent)
+├── llm.py                   # Ollama / Gemini switch used everywhere
 ├── tools.py                 # Tool implementations
 │
 ├── build_embeddings.py
@@ -341,13 +396,11 @@ Codebase-Intelligence-Agent/
 
 - Recursive GraphRAG (multi-hop traversal)
 - AST-aware retrieval
-- LangGraph integration
 - GPT-5 planner and answer generator
 - Repository summarization
 - Cross-file reasoning
 - Code editing agent
 - Streamlit interface
-- Evaluation benchmark
 - Support for multiple programming languages
 
 ---

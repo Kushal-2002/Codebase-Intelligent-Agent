@@ -1,7 +1,7 @@
 import re
 
-from planner import decide_action, MODEL
-from ollama import chat
+from llm import complete
+from planner import decide_action
 
 from tools import (
     search_code,
@@ -38,13 +38,8 @@ def parse_planner_output(response):
 
 def generate_answer(question, conversation):
 
-    response = chat(
-        model=MODEL,
-        options={"temperature": 0},
-        messages=[
-            {
-                "role": "user",
-                "content": f"""
+    return complete(
+        f"""
 You are a codebase assistant.
 
 Use ONLY the observations below to answer the user's question.
@@ -58,12 +53,8 @@ Conversation:
 Give a clear answer.
 
 If the observations are insufficient, say so.
-""",
-            }
-        ],
+"""
     )
-
-    return response.message.content
 
 
 def semantic_context(query):
